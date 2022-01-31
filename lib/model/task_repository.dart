@@ -33,12 +33,17 @@ class TaskRepository {
   ) {
     var returnList = <Task>[];
     returnList = getBaseTaskList(isFinishedTasksIncluded);
+
+    //TODO 「重要」でソート
+
     return returnList;
 
   }
 
   List<Task> getBaseTaskList(bool isFinishedTasksIncluded) {
     baseTaskList.sort((a,b) => a.limitDateTime.compareTo(b.limitDateTime));
+
+    //TODO 完了すみタスクを含む・含まないの処理
     return baseTaskList;
   }
 }

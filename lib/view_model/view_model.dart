@@ -26,11 +26,10 @@ class ViewModel extends ChangeNotifier {
       limitDataTime,
       isImportant,
     );
-    print("tasks: $baseTaskList");
+    getTaskList();
   }
 
   void getTaskList() {
-    //TODO
     selectedTaskList = repository.getTaskList(
       isSorted,
       isFinishedTasksIncluded,
