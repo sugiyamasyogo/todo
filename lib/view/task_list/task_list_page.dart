@@ -15,7 +15,7 @@ class TaskListPage extends StatelessWidget {
     Future((){
       final viewModel = context.read<ViewModel>();
       viewModel.getTaskList();
-    })
+    });
 
     return Consumer<ViewModel>(
       builder: (context, vm, child) {

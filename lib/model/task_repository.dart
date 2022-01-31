@@ -31,6 +31,14 @@ class TaskRepository {
     bool isSorted,
     bool isFinishedTasksIncluded,
   ) {
-    //TODO
+    var returnList = <Task>[];
+    returnList = getBaseTaskList(isFinishedTasksIncluded);
+    return returnList;
+
+  }
+
+  List<Task> getBaseTaskList(bool isFinishedTasksIncluded) {
+    baseTaskList.sort((a,b) => a.limitDateTime.compareTo(b.limitDateTime));
+    return baseTaskList;
   }
 }
