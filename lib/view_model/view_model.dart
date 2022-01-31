@@ -10,6 +10,10 @@ class ViewModel extends ChangeNotifier {
 
   ScreenSize screenSize = ScreenSize.SMALL;
 
+  List<Task> selectedTaskList = [];
+  bool isSorted = false;
+  bool isFinishedTasksIncluded = false;
+
   void addNewTask(
     String title,
     String detail,
@@ -17,8 +21,20 @@ class ViewModel extends ChangeNotifier {
     bool isImportant,
   ) {
     repository.addNewTask(
-      title,detail,limitDataTime,isImportant,
+      title,
+      detail,
+      limitDataTime,
+      isImportant,
     );
     print("tasks: $baseTaskList");
+  }
+
+  void getTaskList() {
+    //TODO
+    selectedTaskList = repository.getTaskList(
+      isSorted,
+      isFinishedTasksIncluded,
+    );
+    notifyListeners();
   }
 }
