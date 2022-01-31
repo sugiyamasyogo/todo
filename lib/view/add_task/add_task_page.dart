@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:todo/util/constants.dart';
+import 'package:todo/view/common/show_snack_bar.dart';
 import 'package:todo/view/common/task_content_part.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/view_model/view_model.dart';
 
 class AddTaskPage extends StatelessWidget {
-   AddTaskPage({Key? key}) : super(key: key);
+  AddTaskPage({Key? key}) : super(key: key);
 
   final taskContentKey = GlobalKey<TaskContentPartState>();
 
@@ -32,23 +33,24 @@ class AddTaskPage extends StatelessWidget {
     );
   }
 
-
   _onDoneAddNewTask(BuildContext context) {
     final taskContentState = taskContentKey.currentState;
     if (taskContentState == null) return;
-    if (taskContentState.formKey.currentState!.validate()){
-
+    if (taskContentState.formKey.currentState!.validate()) {
       final viewModel = context.read<ViewModel>();
       viewModel.addNewTask(
         taskContentState.titleController.text,
         taskContentState.detailController.text,
         taskContentState.limitDataTime,
         taskContentState.isImportant,
-
       );
 
-
       Navigator.pop(context);
+
+      showSnackBar(
+        context: context,
+        contentText: StringR.addTaskCompleted,
+      );
     }
   }
 }
