@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/data/task.dart';
 import 'package:todo/util/constants.dart';
 import 'package:todo/view/common/show_add_new_task.dart';
 import 'package:todo/view/side_menu/side_menu_page.dart';
@@ -65,6 +66,7 @@ class TaskListPage extends StatelessWidget {
                         : CustomColors.taskCardBgColor(context),
                     child: TaskListTilePart(
                       task: task,
+                      onFinishChanged: (isFinished) => _finishTask(context,isFinished,task),
                     ));
               }),
         );
@@ -81,5 +83,9 @@ class TaskListPage extends StatelessWidget {
   //TODO
   _addNewTask(BuildContext context) {
     showAddNewTask(context);
+  }
+//TODO
+  _finishTask(BuildContext context, isFinished, Task task) {
+
   }
 }
