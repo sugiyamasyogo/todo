@@ -46,4 +46,7 @@ class ViewModel extends ChangeNotifier {
     repository.finishTask(selectedTask,isFinished);
     getTaskList();
   }
+
+  //TODO
+  undo() {}
 }

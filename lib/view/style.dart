@@ -50,5 +50,8 @@ class HorizontalSpacer {
   static const taskContent = SizedBox(
     width: 24.0,
   );
+  static const snackBar = SizedBox(
+    width: 16.0,
+  );
 
 }

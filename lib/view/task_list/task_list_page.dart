@@ -96,6 +96,9 @@ class TaskListPage extends StatelessWidget {
     showSnackBar(
       context: context,
       contentText: StringR.finishTaskCompleted,
+      isSnackBarActionNeeded: true,
+      onUndone: () => viewModel.undo()
+
     );
   }
 }
