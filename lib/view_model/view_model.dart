@@ -36,4 +36,9 @@ class ViewModel extends ChangeNotifier {
     );
     notifyListeners();
   }
+
+  void sort(bool isSort) {
+    isSorted = isSort;
+    getTaskList();
+  }
 }
