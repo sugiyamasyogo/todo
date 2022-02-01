@@ -47,9 +47,20 @@ class ViewModel extends ChangeNotifier {
     getTaskList();
   }
 
-  //TODO
+  void deleteTask(Task selectedTask) {
+    repository.deleteTask(selectedTask);
+    getTaskList();
+  }
+
   undo() {
     repository.undo();
     getTaskList();
   }
+
+  changeFinishStatus(bool isIncluded) {
+    isFinishedTasksIncluded = isIncluded;
+    getTaskList();
+  }
+
+
 }
