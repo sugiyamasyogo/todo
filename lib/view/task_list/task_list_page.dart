@@ -31,7 +31,7 @@ class TaskListPage extends StatelessWidget {
             actions: [
               (isSorted)
                   ? IconButton(
-                icon: Icon(Icons.sort),
+                icon: Icon(Icons.undo),
                 onPressed: () => _sort(context, false),
               ) : IconButton(
                 icon: Icon(Icons.sort),
