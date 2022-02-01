@@ -23,25 +23,33 @@ class DetailPage extends StatelessWidget {
         return Scaffold(
           backgroundColor: CustomColors.detailBgColor,
           appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.close),
-              //TODO 閉じる
-              onPressed: null,
-            ),
+            leading: (selectedTask != null)
+                ? IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      _clearCurrentTask(context);
+                      if (screenSize == ScreenSize.SMALL) {
+                        Navigator.pop(context);
+                      }
+                    },
+                  )
+                : null,
             title: Text(StringR.taskDetail),
             centerTitle: true,
-            actions : [
-              //TODO 編集完了
-            IconButton(
-              icon: Icon(Icons.done),
-              onPressed: null,
-            ),
-              //TODO 削除
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: null,
-              ),
-            ],
+            actions: (selectedTask != null)
+                ? [
+                    //TODO 編集完了
+                    IconButton(
+                      icon: Icon(Icons.done),
+                      onPressed: null,
+                    ),
+                    //TODO 削除
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: null,
+                    ),
+                  ]
+                : null,
           ),
           //TODO
           body: ListTile(
@@ -51,5 +59,10 @@ class DetailPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _clearCurrentTask(BuildContext context) {
+    final viewModel = context.read<ViewModel>();
+    viewModel.setCurrentTask(null);
   }
 }

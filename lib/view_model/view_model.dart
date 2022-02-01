@@ -64,7 +64,7 @@ class ViewModel extends ChangeNotifier {
     getTaskList();
   }
 
-  void setCurrentTask(Task selectedTask) {
+  void setCurrentTask(Task? selectedTask) {
     currentTask = selectedTask;
     notifyListeners();
 
