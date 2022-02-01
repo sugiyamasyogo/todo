@@ -35,9 +35,10 @@ class TaskRepository {
     returnList = getBaseTaskList(isFinishedTasksIncluded);
 
     //TODO 「重要」でソート
-
+    if(isSorted){
+      return sortByImportant(returnList);
+    }
     return returnList;
-
   }
 
   List<Task> getBaseTaskList(bool isFinishedTasksIncluded) {
@@ -45,5 +46,21 @@ class TaskRepository {
 
     //TODO 完了すみタスクを含む・含まないの処理
     return baseTaskList;
+  }
+
+  List<Task> sortByImportant(List<Task> taskList) {
+    //taskList.sort((a , b) => (a.isImportant) ? -1 : 1);
+    final subListImportant = taskList.where((task) => task.isImportant == true).toList();
+    final subListNotImportant =taskList.where((task) => task.isImportant == false).toList();
+
+    subListImportant.sort((a,b) => a.limitDateTime.compareTo(b.limitDateTime));
+    subListNotImportant.sort((a,b) => b.limitDateTime.compareTo(b.limitDateTime));
+
+    taskList = [
+      ...subListImportant,
+      ...subListNotImportant,
+    ];
+
+    return taskList;
   }
 }
