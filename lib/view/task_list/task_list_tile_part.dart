@@ -12,7 +12,7 @@ class TaskListTilePart extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(task.title),
-      subtitle: AutoSizeText(
+      subtitle: Text(
           convertDateTimeToString(task.limitDateTime),
       ),
     );
