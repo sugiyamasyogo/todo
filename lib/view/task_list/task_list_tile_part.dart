@@ -11,7 +11,7 @@ class TaskListTilePart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(task.title),
+      title: AutoSizeText(task.title),
       subtitle: Text(
           convertDateTimeToString(task.limitDateTime),
       ),
