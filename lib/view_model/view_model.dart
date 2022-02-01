@@ -52,4 +52,9 @@ class ViewModel extends ChangeNotifier {
     repository.undo();
     getTaskList();
   }
+
+  changeFinishStatus(bool isIncluded) {
+    isFinishedTasksIncluded = isIncluded;
+    getTaskList();
+  }
 }
