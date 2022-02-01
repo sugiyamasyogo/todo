@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todo/data/task.dart';
 import 'package:todo/util/constants.dart';
 import 'package:todo/view/common/show_add_new_task.dart';
+import 'package:todo/view/common/show_snack_bar.dart';
 import 'package:todo/view/side_menu/side_menu_page.dart';
 import 'package:todo/view/style.dart';
 import 'package:todo/view/task_list/task_list_tile_part.dart';
@@ -32,24 +33,25 @@ class TaskListPage extends StatelessWidget {
             actions: [
               (isSorted)
                   ? IconButton(
-                icon: Icon(Icons.undo),
-                onPressed: () => _sort(context, false),
-              ) : IconButton(
-                icon: Icon(Icons.sort),
-                onPressed: () => _sort(context, true),
-              ),
+                      icon: Icon(Icons.undo),
+                      onPressed: () => _sort(context, false),
+                    )
+                  : IconButton(
+                      icon: Icon(Icons.sort),
+                      onPressed: () => _sort(context, true),
+                    ),
             ],
           ),
           floatingActionButton: (screenSize == ScreenSize.LARGE)
               ? null
               : FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () => _addNewTask(context),
-          ),
+                  child: Icon(Icons.add),
+                  onPressed: () => _addNewTask(context),
+                ),
           drawer: (screenSize != ScreenSize.LARGE)
               ? Drawer(
-            child: SideMenuPage(),
-          )
+                  child: SideMenuPage(),
+                )
               : null,
           body: ListView.builder(
               itemCount: selectedTaskList.length,
@@ -66,7 +68,8 @@ class TaskListPage extends StatelessWidget {
                         : CustomColors.taskCardBgColor(context),
                     child: TaskListTilePart(
                       task: task,
-                      onFinishChanged: (isFinished) => _finishTask(context,isFinished,task),
+                      onFinishChanged: (isFinished) =>
+                          _finishTask(context, isFinished, task),
                     ));
               }),
         );
@@ -74,21 +77,25 @@ class TaskListPage extends StatelessWidget {
     );
   }
 
-  _sort(BuildContext context ,bool isSort) {
+  _sort(BuildContext context, bool isSort) {
     final viewModel = context.read<ViewModel>();
     viewModel.sort(isSort);
-
   }
 
   //TODO
   _addNewTask(BuildContext context) {
     showAddNewTask(context);
   }
+
 //TODO
   _finishTask(BuildContext context, isFinished, Task selectedTask) {
     if (isFinished == null) return;
     final viewModel = context.read<ViewModel>();
-    viewModel.finishTask(selectedTask,isFinished);
+    viewModel.finishTask(selectedTask, isFinished);
 
+    showSnackBar(
+      context: context,
+      contentText: StringR.finishTaskCompleted,
+    );
   }
 }
