@@ -4,6 +4,7 @@ import 'package:todo/data/task.dart';
 import 'package:todo/util/constants.dart';
 import 'package:todo/view/common/show_add_new_task.dart';
 import 'package:todo/view/common/show_snack_bar.dart';
+import 'package:todo/view/detail/detail_screen.dart';
 import 'package:todo/view/side_menu/side_menu_page.dart';
 import 'package:todo/view/style.dart';
 import 'package:todo/view/task_list/task_list_tile_part.dart';
@@ -33,25 +34,25 @@ class TaskListPage extends StatelessWidget {
             actions: [
               (isSorted)
                   ? IconButton(
-                icon: Icon(Icons.undo),
-                onPressed: () => _sort(context, false),
-              )
+                      icon: Icon(Icons.undo),
+                      onPressed: () => _sort(context, false),
+                    )
                   : IconButton(
-                icon: Icon(Icons.sort),
-                onPressed: () => _sort(context, true),
-              ),
+                      icon: Icon(Icons.sort),
+                      onPressed: () => _sort(context, true),
+                    ),
             ],
           ),
           floatingActionButton: (screenSize == ScreenSize.LARGE)
               ? null
               : FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () => _addNewTask(context),
-          ),
+                  child: Icon(Icons.add),
+                  onPressed: () => _addNewTask(context),
+                ),
           drawer: (screenSize != ScreenSize.LARGE)
               ? Drawer(
-            child: SideMenuPage(),
-          )
+                  child: SideMenuPage(),
+                )
               : null,
           body: ListView.builder(
               itemCount: selectedTaskList.length,
@@ -71,6 +72,7 @@ class TaskListPage extends StatelessWidget {
                       onFinishChanged: (isFinished) =>
                           _finishTask(context, isFinished, task),
                       onDelete: () => _deleteTask(context, task),
+                      onEdit: () => _showTaskDetail(context, task),
                     ));
               }),
         );
@@ -97,9 +99,7 @@ class TaskListPage extends StatelessWidget {
         context: context,
         contentText: StringR.finishTaskCompleted,
         isSnackBarActionNeeded: true,
-        onUndone: () => viewModel.undo()
-
-    );
+        onUndone: () => viewModel.undo());
   }
 
   _deleteTask(BuildContext context, Task selectedTask) {
@@ -107,10 +107,24 @@ class TaskListPage extends StatelessWidget {
     viewModel.deleteTask(selectedTask);
 
     showSnackBar(
-      context: context,
-      contentText: StringR.deleteTaskCompleted,
-      isSnackBarActionNeeded: true,
-      onUndone: () => viewModel.undo()
-    );
+        context: context,
+        contentText: StringR.deleteTaskCompleted,
+        isSnackBarActionNeeded: true,
+        onUndone: () => viewModel.undo());
+  }
+
+  _showTaskDetail(BuildContext context, Task selectedTask) {
+    final viewModel = context.read<ViewModel>();
+    final screenSize = viewModel.screenSize;
+    viewModel.setCurrentTask(selectedTask);
+
+    if (screenSize == ScreenSize.SMALL) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailScreen(),
+        ),
+      );
+    }
   }
 }
