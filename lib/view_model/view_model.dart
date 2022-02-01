@@ -48,5 +48,8 @@ class ViewModel extends ChangeNotifier {
   }
 
   //TODO
-  undo() {}
+  undo() {
+    repository.undo();
+    getTaskList();
+  }
 }
