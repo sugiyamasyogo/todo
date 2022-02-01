@@ -49,7 +49,18 @@ class TaskRepository {
   }
 
   List<Task> sortByImportant(List<Task> taskList) {
-    taskList.sort((a , b) => (a.isImportant) ? -1 : 1);
+    //taskList.sort((a , b) => (a.isImportant) ? -1 : 1);
+    final subListImportant = taskList.where((task) => task.isImportant == true).toList();
+    final subListNotImportant =taskList.where((task) => task.isImportant == false).toList();
+
+    subListImportant.sort((a,b) => a.limitDateTime.compareTo(b.limitDateTime));
+    subListNotImportant.sort((a,b) => b.limitDateTime.compareTo(b.limitDateTime));
+
+    taskList = [
+      ...subListImportant,
+      ...subListNotImportant,
+    ];
+
     return taskList;
   }
 }
