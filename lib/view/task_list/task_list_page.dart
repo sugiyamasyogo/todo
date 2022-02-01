@@ -12,8 +12,7 @@ class TaskListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    Future((){
+    Future(() {
       final viewModel = context.read<ViewModel>();
       viewModel.getTaskList();
     });
@@ -23,7 +22,7 @@ class TaskListPage extends StatelessWidget {
         final screenSize = vm.screenSize;
         final selectedTaskList = vm.selectedTaskList;
         return Scaffold(
-          backgroundColor: PageColor.taskListBgColor,
+          backgroundColor: CustomColors.taskListBgColor,
           appBar: AppBar(
             title: Text(StringR.taskList),
             centerTitle: true,
@@ -46,17 +45,23 @@ class TaskListPage extends StatelessWidget {
                 )
               : null,
           body: ListView.builder(
-            itemCount: selectedTaskList.length,
-            shrinkWrap: true,
-            itemBuilder: (context,int index){
-              final task = selectedTaskList[index];
-              return Card(
-                child:TaskListTilePart(
-                  task: task,
-                )
-              );
-            }),
-          );
+              itemCount: selectedTaskList.length,
+              shrinkWrap: true,
+              itemBuilder: (context, int index) {
+                final task = selectedTaskList[index];
+
+                final now = DateTime.now();
+                final limit = task.limitDateTime;
+
+                return Card(
+                    color: (now.compareTo(limit) > 0)
+                        ? CustomColors.periodOverTaskColor
+                        : CustomColors.taskCardBgColor(context),
+                    child: TaskListTilePart(
+                      task: task,
+                    ));
+              }),
+        );
       },
     );
   }
@@ -67,7 +72,5 @@ class TaskListPage extends StatelessWidget {
   //TODO
   _addNewTask(BuildContext context) {
     showAddNewTask(context);
-
   }
-
 }
