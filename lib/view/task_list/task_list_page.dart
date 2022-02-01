@@ -85,7 +85,10 @@ class TaskListPage extends StatelessWidget {
     showAddNewTask(context);
   }
 //TODO
-  _finishTask(BuildContext context, isFinished, Task task) {
+  _finishTask(BuildContext context, isFinished, Task selectedTask) {
+    if (isFinished == null) return;
+    final viewModel = context.read<ViewModel>();
+    viewModel.finishTask(selectedTask,isFinished);
 
   }
 }

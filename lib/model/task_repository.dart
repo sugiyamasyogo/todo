@@ -63,4 +63,6 @@ class TaskRepository {
 
     return taskList;
   }
+
+  void finishTask(Task selectedTask, isFinished) {}
 }
