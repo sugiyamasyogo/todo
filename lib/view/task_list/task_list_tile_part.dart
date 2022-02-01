@@ -27,14 +27,17 @@ class TaskListTilePart extends StatelessWidget {
                     ),
                   ),
                 )
-          ///Chip Widgetでの実装
+
+              ///Chip Widgetでの実装
               // ? Padding(
               //   padding: const EdgeInsets.all(4.0),
               //   child: Chip(
               //       label: Text(StringR.important),),
               // )
               : Container(),
-          Text(task.title),
+          Expanded(
+            child: AutoSizeText(task.title,overflow: TextOverflow.ellipsis,),
+          ),
         ],
       ),
       subtitle: AutoSizeText(
