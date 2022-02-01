@@ -1,6 +1,10 @@
 import 'package:todo/data/task.dart';
 
 class TaskRepository {
+
+  List<Task>baseTaskListBeforeChange = [];
+
+
   void addNewTask(
     String title,
     String detail,
@@ -44,8 +48,11 @@ class TaskRepository {
   List<Task> getBaseTaskList(bool isFinishedTasksIncluded) {
     baseTaskList.sort((a,b) => a.limitDateTime.compareTo(b.limitDateTime));
 
-    //TODO 完了すみタスクを含む・含まないの処理
-    return baseTaskList;
+    if (isFinishedTasksIncluded){
+      return baseTaskList;
+    } else {
+      return baseTaskList.where((task) => task.isFinished == false).toList();
+    }
   }
 
   List<Task> sortByImportant(List<Task> taskList) {
@@ -62,5 +69,34 @@ class TaskRepository {
     ];
 
     return taskList;
+  }
+
+  void finishTask(Task selectedTask, isFinished) {
+    baseTaskListBeforeChange = copyBaseTaskList();
+    final updateTask = selectedTask.copyWith(isFinished: isFinished);
+    updateTaskList(updateTask);
+  }
+
+  void updateTaskList(Task updateTask) {
+    final index = searchIndex(updateTask);
+    baseTaskList[index] = updateTask;
+  }
+
+  int searchIndex(Task selectedTask) {
+    return baseTaskList.indexWhere((task) => task.id == selectedTask.id);
+
+  }
+
+  void undo() {
+    baseTaskList = baseTaskListBeforeChange;
+  }
+
+  List<Task> copyBaseTaskList() {
+    var returnList = <Task>[];
+
+    baseTaskList.forEach((task) {
+      returnList.add(task);
+    });
+    return returnList;
   }
 }

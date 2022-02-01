@@ -8,6 +8,8 @@ import 'package:todo/view_model/view_model.dart';
 showSnackBar({
   required BuildContext context,
   required String contentText,
+  required bool isSnackBarActionNeeded,
+  VoidCallback? onUndone,
 }) {
   final viewModel = context.read<ViewModel>();
   final screenSize = viewModel.screenSize;
@@ -15,6 +17,12 @@ showSnackBar({
   if (screenSize == ScreenSize.SMALL) {
     final snackBar = SnackBar(
       content: Text(contentText),
+      action: (isSnackBarActionNeeded || onUndone != null)
+          ? SnackBarAction(
+              label: StringR.undo,
+              onPressed: onUndone!,
+            )
+          : null,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   } else {
@@ -28,9 +36,24 @@ showSnackBar({
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AutoSizeText(contentText),
-              TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: AutoSizeText(StringR.close))
+              Row(
+                children: [
+                  TextButton(
+                    child: AutoSizeText(StringR.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  HorizontalSpacer.snackBar,
+                  (isSnackBarActionNeeded || onUndone != null)
+                      ? TextButton(
+                          child: AutoSizeText(StringR.undo),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            onUndone!();
+                          },
+                        )
+                      : Container(),
+                ],
+              ),
             ],
           ),
         ),

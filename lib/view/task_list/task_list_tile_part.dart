@@ -7,12 +7,22 @@ import 'package:todo/view/style.dart';
 
 class TaskListTilePart extends StatelessWidget {
   final Task task;
+  final ValueChanged onFinishChanged;
 
-  TaskListTilePart({Key? key, required this.task}) : super(key: key);
+  TaskListTilePart({
+    Key? key,
+    required this.task,
+    required this.onFinishChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      leading: Radio(
+        value: true,
+        groupValue: task.isFinished,
+        onChanged: (value) => onFinishChanged(value),
+      ),
       title: Row(
         children: [
           (task.isImportant)
@@ -27,14 +37,20 @@ class TaskListTilePart extends StatelessWidget {
                     ),
                   ),
                 )
-          ///Chip Widgetでの実装
+
+              ///Chip Widgetでの実装
               // ? Padding(
               //   padding: const EdgeInsets.all(4.0),
               //   child: Chip(
               //       label: Text(StringR.important),),
               // )
               : Container(),
-          Text(task.title),
+          Expanded(
+            child: AutoSizeText(
+              task.title,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
       subtitle: AutoSizeText(
