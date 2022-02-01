@@ -4,6 +4,7 @@ import 'package:todo/util/constants.dart';
 import 'package:todo/view/common/show_add_new_task.dart';
 import 'package:todo/view/side_menu/side_menu_page.dart';
 import 'package:todo/view/style.dart';
+import 'package:todo/view/task_list/task_list_tile_part.dart';
 import 'package:todo/view_model/view_model.dart';
 
 class TaskListPage extends StatelessWidget {
@@ -50,10 +51,9 @@ class TaskListPage extends StatelessWidget {
             itemBuilder: (context,int index){
               final task = selectedTaskList[index];
               return Card(
-                child: ListTile(
-                  title: Text(task.title),
-                  subtitle: Text(task.limitDateTime.toString()),
-                ),
+                child:TaskListTilePart(
+                  task: task,
+                )
               );
             }),
           );
