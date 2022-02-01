@@ -14,6 +14,8 @@ class ViewModel extends ChangeNotifier {
   bool isSorted = false;
   bool isFinishedTasksIncluded = false;
 
+  Task? currentTask;
+
   void addNewTask(
     String title,
     String detail,
@@ -60,6 +62,12 @@ class ViewModel extends ChangeNotifier {
   changeFinishStatus(bool isIncluded) {
     isFinishedTasksIncluded = isIncluded;
     getTaskList();
+  }
+
+  void setCurrentTask(Task? selectedTask) {
+    currentTask = selectedTask;
+    notifyListeners();
+
   }
 
 
