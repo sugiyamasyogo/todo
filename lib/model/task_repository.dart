@@ -77,6 +77,12 @@ class TaskRepository {
     updateTaskList(updateTask);
   }
 
+  void deleteTask(Task selectedTask) {
+    baseTaskListBeforeChange = copyBaseTaskList();
+    final index = searchIndex(selectedTask);
+    baseTaskList.removeAt(index);
+  }
+
   void updateTaskList(Task updateTask) {
     final index = searchIndex(updateTask);
     baseTaskList[index] = updateTask;
@@ -99,4 +105,5 @@ class TaskRepository {
     });
     return returnList;
   }
+
 }

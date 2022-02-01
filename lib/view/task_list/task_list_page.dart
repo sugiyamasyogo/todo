@@ -33,25 +33,25 @@ class TaskListPage extends StatelessWidget {
             actions: [
               (isSorted)
                   ? IconButton(
-                      icon: Icon(Icons.undo),
-                      onPressed: () => _sort(context, false),
-                    )
+                icon: Icon(Icons.undo),
+                onPressed: () => _sort(context, false),
+              )
                   : IconButton(
-                      icon: Icon(Icons.sort),
-                      onPressed: () => _sort(context, true),
-                    ),
+                icon: Icon(Icons.sort),
+                onPressed: () => _sort(context, true),
+              ),
             ],
           ),
           floatingActionButton: (screenSize == ScreenSize.LARGE)
               ? null
               : FloatingActionButton(
-                  child: Icon(Icons.add),
-                  onPressed: () => _addNewTask(context),
-                ),
+            child: Icon(Icons.add),
+            onPressed: () => _addNewTask(context),
+          ),
           drawer: (screenSize != ScreenSize.LARGE)
               ? Drawer(
-                  child: SideMenuPage(),
-                )
+            child: SideMenuPage(),
+          )
               : null,
           body: ListView.builder(
               itemCount: selectedTaskList.length,
@@ -70,6 +70,7 @@ class TaskListPage extends StatelessWidget {
                       task: task,
                       onFinishChanged: (isFinished) =>
                           _finishTask(context, isFinished, task),
+                      onDelete: () => _deleteTask(context, task),
                     ));
               }),
         );
@@ -87,18 +88,29 @@ class TaskListPage extends StatelessWidget {
     showAddNewTask(context);
   }
 
-//TODO
   _finishTask(BuildContext context, isFinished, Task selectedTask) {
     if (isFinished == null) return;
     final viewModel = context.read<ViewModel>();
     viewModel.finishTask(selectedTask, isFinished);
 
     showSnackBar(
+        context: context,
+        contentText: StringR.finishTaskCompleted,
+        isSnackBarActionNeeded: true,
+        onUndone: () => viewModel.undo()
+
+    );
+  }
+
+  _deleteTask(BuildContext context, Task selectedTask) {
+    final viewModel = context.read<ViewModel>();
+    viewModel.deleteTask(selectedTask);
+
+    showSnackBar(
       context: context,
-      contentText: StringR.finishTaskCompleted,
+      contentText: StringR.deleteTaskCompleted,
       isSnackBarActionNeeded: true,
       onUndone: () => viewModel.undo()
-
     );
   }
 }
