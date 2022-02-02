@@ -8,7 +8,9 @@ import 'package:todo/view_model/view_model.dart';
 import 'package:tuple/tuple.dart';
 
 class DetailPage extends StatelessWidget {
-  const DetailPage({Key? key}) : super(key: key);
+  DetailPage({Key? key}) : super(key: key);
+
+  final taskContentPartKey = GlobalKey<TaskContentPartState>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,10 @@ class DetailPage extends StatelessWidget {
       builder: (context, data, child) {
         final selectedTask = data.item1;
         final screenSize = data.item2;
+
+        if (selectedTask != null && screenSize != ScreenSize.SMALL) {
+          _updateDetailInfo(selectedTask);
+        }
 
         return Scaffold(
           backgroundColor: CustomColors.detailBgColor,
@@ -53,11 +59,13 @@ class DetailPage extends StatelessWidget {
                 : null,
           ),
           //TODO
-          body:TaskContentPart(
-            isEditMode: true,
-            selectedTask: selectedTask,
-
-          )
+          body: (selectedTask != null)
+              ? TaskContentPart(
+                  key: taskContentPartKey,
+                  isEditMode: true,
+                  selectedTask: selectedTask,
+                )
+              : null,
         );
       },
     );
@@ -66,5 +74,12 @@ class DetailPage extends StatelessWidget {
   void _clearCurrentTask(BuildContext context) {
     final viewModel = context.read<ViewModel>();
     viewModel.setCurrentTask(null);
+  }
+
+  void _updateDetailInfo(Task selectedTask) {
+    final taskContentPartState = taskContentPartKey.currentState;
+    if (taskContentPartState == null) return;
+    taskContentPartState.taskEditing = selectedTask;
+    taskContentPartState.setDetailData();
   }
 }

@@ -26,20 +26,22 @@ class TaskContentPartState extends State<TaskContentPart> {
 
   final formKey = GlobalKey<FormState>();
 
+  Task? taskEditing;
+
   @override
   void initState() {
     if (widget.isEditMode && widget.selectedTask != null) {
+      taskEditing = widget.selectedTask;
       setDetailData();
     }
     super.initState();
   }
 
   void setDetailData() {
-    final task = widget.selectedTask!;
-    titleController.text = task.title;
-    detailController.text = task.detail;
-    isImportant = task.isImportant;
-    limitDataTime = task.limitDateTime;
+    titleController.text = taskEditing!.title;
+    detailController.text = taskEditing!.detail;
+    isImportant = taskEditing!.isImportant;
+    limitDataTime = taskEditing!.limitDateTime;
   }
 
   @override
