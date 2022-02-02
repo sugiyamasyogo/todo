@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/data/task.dart';
 import 'package:todo/util/constants.dart';
+import 'package:todo/view/common/task_content_part.dart';
 import 'package:todo/view/style.dart';
 import 'package:todo/view_model/view_model.dart';
 import 'package:tuple/tuple.dart';
@@ -52,10 +53,11 @@ class DetailPage extends StatelessWidget {
                 : null,
           ),
           //TODO
-          body: ListTile(
-            title: Text(selectedTask?.title ?? ""),
-            subtitle: Text(selectedTask?.limitDateTime.toString() ?? ""),
-          ),
+          body:TaskContentPart(
+            isEditMode: true,
+            selectedTask: selectedTask,
+
+          )
         );
       },
     );

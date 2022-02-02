@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:todo/data/task.dart';
 import 'package:todo/util/constants.dart';
 import 'package:todo/util/functions.dart';
 import 'package:todo/view/style.dart';
 
 class TaskContentPart extends StatefulWidget {
-  const TaskContentPart({Key? key}) : super(key: key);
+  final Task? selectedTask;
+  final bool isEditMode;
+
+  const TaskContentPart({
+    Key? key,
+    this.selectedTask,
+    required this.isEditMode,
+  }) : super(key: key);
 
   @override
   State<TaskContentPart> createState() => TaskContentPartState();
@@ -19,6 +27,22 @@ class TaskContentPartState extends State<TaskContentPart> {
   final formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    if (widget.isEditMode && widget.selectedTask != null) {
+      setDetailData();
+    }
+    super.initState();
+  }
+
+  void setDetailData() {
+    final task = widget.selectedTask!;
+    titleController.text = task.title;
+    detailController.text = task.detail;
+    isImportant = task.isImportant;
+    limitDataTime = task.limitDateTime;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -29,7 +53,7 @@ class TaskContentPartState extends State<TaskContentPart> {
             children: [
               TextFormField(
                 validator: (value) {
-                  if (value == null || value.isEmpty){
+                  if (value == null || value.isEmpty) {
                     return StringR.pleaseEnterTitle;
                   }
                   return null;
@@ -89,10 +113,9 @@ class TaskContentPartState extends State<TaskContentPart> {
                 controller: detailController,
                 style: TextStyles.newTaskDetailTextStyle,
                 decoration: InputDecoration(
-                  icon:Icon(Icons.description),
+                  icon: Icon(Icons.description),
                   hintText: StringR.detail,
                   border: OutlineInputBorder(),
-
                 ),
               )
             ],
@@ -102,7 +125,6 @@ class TaskContentPartState extends State<TaskContentPart> {
     );
   }
 
-  //TODO
   _setLimitData() async {
     limitDataTime = await showDatePicker(
           context: context,
@@ -114,4 +136,6 @@ class TaskContentPartState extends State<TaskContentPart> {
         DateTime.now();
     setState(() {});
   }
+
+
 }
