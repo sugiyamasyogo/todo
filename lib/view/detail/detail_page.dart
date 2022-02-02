@@ -48,7 +48,7 @@ class DetailPage extends StatelessWidget {
                     //TODO 編集完了
                     IconButton(
                       icon: Icon(Icons.done),
-                      onPressed: null,
+                      onPressed: () => _updateTask(context, selectedTask),
                     ),
                     //TODO 削除
                     IconButton(
@@ -81,5 +81,22 @@ class DetailPage extends StatelessWidget {
     if (taskContentPartState == null) return;
     taskContentPartState.taskEditing = selectedTask;
     taskContentPartState.setDetailData();
+  }
+
+  _updateTask(BuildContext context, Task selectedTask) {
+    final taskContentPartState = taskContentPartKey.currentState;
+    if (taskContentPartState == null) return;
+    if (taskContentPartState.formKey.currentState!.validate()){
+      final viewModel = context.read<ViewModel>();
+      final taskUpdated = selectedTask.copyWith(
+        title: taskContentPartState.titleController.text,
+        detail: taskContentPartState.detailController.text,
+        limitDateTime: taskContentPartState.limitDataTime,
+        isImportant: taskContentPartState.isImportant,
+      );
+      viewModel.updateTask(taskUpdated);
+
+    }
+    //TODO snackBar
   }
 }
