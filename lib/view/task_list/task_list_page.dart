@@ -71,22 +71,30 @@ class TaskListPage extends StatelessWidget {
                   child: (DeviceInfo.isWebOrDesktop)
                       ? _createTaskListTile(context, task)
                       : Slidable(
+                          key: ValueKey<int>(task.id),
                           child: _createTaskListTile(context, task),
                           endActionPane: ActionPane(
+                            dismissible: DismissiblePane(
+                              onDismissed: () => _deleteTask(context, task),
+                            ),
                             motion: ScrollMotion(),
                             extentRatio: 0.65,
                             children: [
                               SlidableAction(
                                 label: StringR.edit,
                                 icon: Icons.edit,
-                                backgroundColor: CustomColors.slideActionColorLight(context),
-                                onPressed: (context) => _showTaskDetail(context,task),
+                                backgroundColor:
+                                    CustomColors.slideActionColorLight(context),
+                                onPressed: (context) =>
+                                    _showTaskDetail(context, task),
                               ),
                               SlidableAction(
                                 label: StringR.delete,
                                 icon: Icons.delete,
-                                backgroundColor: CustomColors.slideActionColorDark(context),
-                                onPressed: (context) => _deleteTask(context,task),
+                                backgroundColor:
+                                    CustomColors.slideActionColorDark(context),
+                                onPressed: (context) =>
+                                    _deleteTask(context, task),
                               ),
                               SlidableAction(
                                 label: StringR.close,
