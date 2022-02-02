@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/data/task.dart';
 import 'package:todo/util/constants.dart';
+import 'package:todo/view/common/task_content_part.dart';
 import 'package:todo/view/style.dart';
 import 'package:todo/view_model/view_model.dart';
 import 'package:tuple/tuple.dart';
 
 class DetailPage extends StatelessWidget {
-  const DetailPage({Key? key}) : super(key: key);
+  DetailPage({Key? key}) : super(key: key);
+
+  final taskContentPartKey = GlobalKey<TaskContentPartState>();
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +22,10 @@ class DetailPage extends StatelessWidget {
       builder: (context, data, child) {
         final selectedTask = data.item1;
         final screenSize = data.item2;
+
+        if (selectedTask != null && screenSize != ScreenSize.SMALL) {
+          _updateDetailInfo(selectedTask);
+        }
 
         return Scaffold(
           backgroundColor: CustomColors.detailBgColor,
@@ -41,7 +48,7 @@ class DetailPage extends StatelessWidget {
                     //TODO 編集完了
                     IconButton(
                       icon: Icon(Icons.done),
-                      onPressed: null,
+                      onPressed: () => _updateTask(context, selectedTask),
                     ),
                     //TODO 削除
                     IconButton(
@@ -52,10 +59,13 @@ class DetailPage extends StatelessWidget {
                 : null,
           ),
           //TODO
-          body: ListTile(
-            title: Text(selectedTask?.title ?? ""),
-            subtitle: Text(selectedTask?.limitDateTime.toString() ?? ""),
-          ),
+          body: (selectedTask != null)
+              ? TaskContentPart(
+                  key: taskContentPartKey,
+                  isEditMode: true,
+                  selectedTask: selectedTask,
+                )
+              : null,
         );
       },
     );
@@ -64,5 +74,29 @@ class DetailPage extends StatelessWidget {
   void _clearCurrentTask(BuildContext context) {
     final viewModel = context.read<ViewModel>();
     viewModel.setCurrentTask(null);
+  }
+
+  void _updateDetailInfo(Task selectedTask) {
+    final taskContentPartState = taskContentPartKey.currentState;
+    if (taskContentPartState == null) return;
+    taskContentPartState.taskEditing = selectedTask;
+    taskContentPartState.setDetailData();
+  }
+
+  _updateTask(BuildContext context, Task selectedTask) {
+    final taskContentPartState = taskContentPartKey.currentState;
+    if (taskContentPartState == null) return;
+    if (taskContentPartState.formKey.currentState!.validate()){
+      final viewModel = context.read<ViewModel>();
+      final taskUpdated = selectedTask.copyWith(
+        title: taskContentPartState.titleController.text,
+        detail: taskContentPartState.detailController.text,
+        limitDateTime: taskContentPartState.limitDataTime,
+        isImportant: taskContentPartState.isImportant,
+      );
+      viewModel.updateTask(taskUpdated);
+
+    }
+    //TODO snackBar
   }
 }
