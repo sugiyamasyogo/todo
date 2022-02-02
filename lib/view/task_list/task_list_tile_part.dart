@@ -30,16 +30,18 @@ class _TaskListTilePartState extends State<TaskListTilePart> {
   Widget build(BuildContext context) {
     return MouseRegion(
       onHover: (event) {
-        print("onHover");
-        setState(() {
-          isDisplayPopupMenu = true;
-        });
+        if (DeviceInfo.isWebOrDesktop) {
+          setState(() {
+            isDisplayPopupMenu = true;
+          });
+        }
       },
       onExit: (_) {
-        print("onExit");
-        setState(() {
-          isDisplayPopupMenu = false;
-        });
+        if (DeviceInfo.isWebOrDesktop) {
+          setState(() {
+            isDisplayPopupMenu = false;
+          });
+        }
       },
       child: ListTile(
         leading: Radio(
@@ -82,9 +84,12 @@ class _TaskListTilePartState extends State<TaskListTilePart> {
         subtitle: AutoSizeText(
           convertDateTimeToString(widget.task.limitDateTime),
         ),
-        trailing: PopupMenuButton(
+        trailing: (!DeviceInfo.isWebOrDesktop)
+            ? null
+            : PopupMenuButton(
                 tooltip: StringR.showMenu,
-                icon: (isDisplayPopupMenu) ? Icon(Icons.more_vert) : Container(),
+                icon:
+                    (isDisplayPopupMenu) ? Icon(Icons.more_vert) : Container(),
                 itemBuilder: (context) {
                   return [
                     PopupMenuItem<TaskListTileMenu>(
