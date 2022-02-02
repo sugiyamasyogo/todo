@@ -16,11 +16,10 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<ViewModel, Tuple2<Task?, ScreenSize>>(
-      selector: (context, vm) =>
-          Tuple2(
-            vm.currentTask,
-            vm.screenSize,
-          ),
+      selector: (context, vm) => Tuple2(
+        vm.currentTask,
+        vm.screenSize,
+      ),
       builder: (context, data, child) {
         final selectedTask = data.item1;
         final screenSize = data.item2;
@@ -30,45 +29,50 @@ class DetailPage extends StatelessWidget {
         }
 
         return Scaffold(
-          backgroundColor: CustomColors.detailBgColor,
-          appBar: AppBar(
-            leading: (selectedTask != null)
-                ? IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                _clearCurrentTask(context);
-                if (screenSize == ScreenSize.SMALL) {
-                  Navigator.pop(context);
-                }
-              },
-            )
+            backgroundColor: CustomColors.detailBgColor,
+            appBar: AppBar(
+              leading: (selectedTask != null)
+                  ? IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        _clearCurrentTask(context);
+                        if (screenSize == ScreenSize.SMALL) {
+                          Navigator.pop(context);
+                        }
+                      },
+                    )
+                  : null,
+              title: Text(StringR.taskDetail),
+              centerTitle: true,
+              actions: (selectedTask != null)
+                  ? [
+                      IconButton(
+                        icon: Icon(Icons.done),
+                        onPressed: () => _updateTask(context, selectedTask),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () => _deleteTask(context, selectedTask),
+                      ),
+                    ]
+                  : null,
+            ),
+            //TODO
+            body: (selectedTask != null)
+                ? TaskContentPart(
+                    key: taskContentPartKey,
+                    isEditMode: true,
+                    selectedTask: selectedTask,
+                  )
                 : null,
-            title: Text(StringR.taskDetail),
-            centerTitle: true,
-            actions: (selectedTask != null)
-                ? [
-              //TODO 編集完了
-              IconButton(
-                icon: Icon(Icons.done),
-                onPressed: () => _updateTask(context, selectedTask),
-              ),
-              //TODO 削除
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: null,
-              ),
-            ]
-                : null,
-          ),
-          //TODO
-          body: (selectedTask != null)
-              ? TaskContentPart(
-            key: taskContentPartKey,
-            isEditMode: true,
-            selectedTask: selectedTask,
-          )
-              : null,
-        );
+            floatingActionButton: (selectedTask != null)
+                ? FloatingActionButton.extended(
+                    onPressed: () => _finishTask(context, selectedTask),
+                    label: Text((!selectedTask.isFinished)
+                        ? StringR.complete
+                        : StringR.inComplete),
+                  )
+                : null);
       },
     );
   }
@@ -103,14 +107,43 @@ class DetailPage extends StatelessWidget {
       contentText: StringR.editTaskCompleted,
       isSnackBarActionNeeded: false,
     );
-    endEditTask(context);
+    endEditTask(context, isEdit: true);
   }
 
-  void endEditTask(BuildContext context) {
+  _deleteTask(BuildContext context, Task selectedTask) {
+    final viewModel = context.read<ViewModel>();
+    viewModel.deleteTask(selectedTask);
+    showSnackBar(
+      context: context,
+      contentText: StringR.deleteTaskCompleted,
+      isSnackBarActionNeeded: true,
+      onUndone: () => viewModel.undo(),
+    );
+    endEditTask(context, isEdit: false);
+  }
+
+  _finishTask(BuildContext context, Task selectedTask) {
+    final viewModel = context.read<ViewModel>();
+    final isFinished = !selectedTask.isFinished;
+    viewModel.finishTask(selectedTask, isFinished);
+    showSnackBar(
+      context: context,
+      contentText: (isFinished)
+          ? StringR.finishTaskCompleted
+          : StringR.unFinishTaskCompleted,
+      isSnackBarActionNeeded: true,
+      onUndone: () => viewModel.undo(),
+    );
+    endEditTask(context, isEdit: false);
+  }
+
+  void endEditTask(BuildContext context, {required bool isEdit}) {
     final viewModel = context.read<ViewModel>();
     final screenSize = viewModel.screenSize;
     if (screenSize == ScreenSize.SMALL) {
       Navigator.pop(context);
+    } else {
+      if (!isEdit) viewModel.setCurrentTask(null);
     }
   }
 }
