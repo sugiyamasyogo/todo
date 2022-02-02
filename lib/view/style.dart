@@ -5,9 +5,13 @@ class CustomColors{
   static const taskListBgColor = Color(0xFF212121);
   static const detailBgColor = Color(0xFF424242);
 
+
   static const periodOverTaskColor = Colors.red;
 
   static  Color taskCardBgColor(BuildContext context) => Theme.of(context).cardColor;
+  static  Color? detailFabTextColor(BuildContext context) => Theme.of(context).textTheme.caption?.color;
+
+  static const detailPageFabBgColor = Colors.transparent;
 }
 
 
@@ -38,6 +42,8 @@ class TextStyles {
   static const newTaskItemTextStyle = TextStyle(fontSize: 16.0);
   static const newTaskDetailTextStyle = TextStyle(fontSize: 14.0);
   static const listTileChipTextStyle = TextStyle(fontSize: 12.0);
+  static const completeButtonTextStyle = TextStyle(fontSize: 16.0);
+
 }
 
 class VerticalSpacer {

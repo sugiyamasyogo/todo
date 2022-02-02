@@ -67,10 +67,17 @@ class DetailPage extends StatelessWidget {
                 : null,
             floatingActionButton: (selectedTask != null)
                 ? FloatingActionButton.extended(
+                    elevation: 0.0,
                     onPressed: () => _finishTask(context, selectedTask),
-                    label: Text((!selectedTask.isFinished)
-                        ? StringR.complete
-                        : StringR.inComplete),
+                    backgroundColor: CustomColors.detailPageFabBgColor,
+                    label: Text(
+                      (!selectedTask.isFinished)
+                          ? StringR.complete
+                          : StringR.inComplete,
+                      style: TextStyles.completeButtonTextStyle.copyWith(
+                        color: CustomColors.detailFabTextColor(context)
+                      ),
+                    ),
                   )
                 : null);
       },
