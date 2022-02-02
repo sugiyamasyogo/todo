@@ -1,21 +1,30 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class CustomColors{
+class CustomColors {
   static const sideMenuBgColor = Color(0xFF1b1b1b);
   static const taskListBgColor = Color(0xFF212121);
   static const detailBgColor = Color(0xFF424242);
 
-
   static const periodOverTaskColor = Colors.red;
 
-  static  Color taskCardBgColor(BuildContext context) => Theme.of(context).cardColor;
-  static  Color? detailFabTextColor(BuildContext context) => Theme.of(context).textTheme.caption?.color;
+  static Color taskCardBgColor(BuildContext context) =>
+      Theme.of(context).cardColor;
+
+  static Color? detailFabTextColor(BuildContext context) =>
+      Theme.of(context).textTheme.caption?.color;
+
+  static Color slideActionColorDark(BuildContext context) =>
+      Theme.of(context).primaryColorDark;
+
+  static Color slideActionColorLight(BuildContext context) =>
+      Theme.of(context).primaryColorLight;
+
 
   static const detailPageFabBgColor = Colors.transparent;
 }
-
-
-
 
 class WidgetColors {
   static const timeOverChipBgColor = Colors.red;
@@ -43,7 +52,6 @@ class TextStyles {
   static const newTaskDetailTextStyle = TextStyle(fontSize: 14.0);
   static const listTileChipTextStyle = TextStyle(fontSize: 12.0);
   static const completeButtonTextStyle = TextStyle(fontSize: 16.0);
-
 }
 
 class VerticalSpacer {
@@ -59,5 +67,9 @@ class HorizontalSpacer {
   static const snackBar = SizedBox(
     width: 16.0,
   );
+}
 
+class DeviceInfo {
+  static bool get isDesktop => !kIsWeb && (Platform.isMacOS || Platform.isWindows || Platform.isLinux);
+  static bool get isWebOrDesktop => kIsWeb || isDesktop;
 }
