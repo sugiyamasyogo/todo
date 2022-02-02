@@ -33,23 +33,23 @@ class TaskListTilePart extends StatelessWidget {
         children: [
           (task.isImportant)
               ? Padding(
-                  padding: const EdgeInsets.only(right: 4.0),
-                  child: Container(
-                    padding: EdgeInsets.all(4.0),
-                    color: Colors.black,
-                    child: Text(
-                      StringR.important,
-                      style: TextStyles.listTileChipTextStyle,
-                    ),
-                  ),
-                )
+            padding: const EdgeInsets.only(right: 4.0),
+            child: Container(
+              padding: EdgeInsets.all(4.0),
+              color: Colors.black,
+              child: Text(
+                StringR.important,
+                style: TextStyles.listTileChipTextStyle,
+              ),
+            ),
+          )
 
-              ///Chip Widgetでの実装
-              // ? Padding(
-              //   padding: const EdgeInsets.all(4.0),
-              //   child: Chip(
-              //       label: Text(StringR.important),),
-              // )
+          ///Chip Widgetでの実装
+          // ? Padding(
+          //   padding: const EdgeInsets.all(4.0),
+          //   child: Chip(
+          //       label: Text(StringR.important),),
+          // )
               : Container(),
           Expanded(
             child: AutoSizeText(
@@ -61,6 +61,30 @@ class TaskListTilePart extends StatelessWidget {
       ),
       subtitle: AutoSizeText(
         convertDateTimeToString(task.limitDateTime),
+      ),
+      trailing: PopupMenuButton(
+          tooltip: StringR.showMenu,
+          icon: Icon(Icons.more_vert),
+          itemBuilder: (context) {
+            return [
+              PopupMenuItem<TaskListTileMenu>(
+                child: Text(StringR.edit),
+                value: TaskListTileMenu.EDIT,
+              ),
+              PopupMenuItem<TaskListTileMenu>(
+                child: Text(StringR.delete),
+                value: TaskListTileMenu.DELETE,
+              ),
+            ];
+          },
+          onSelected: (selectedMenu) {
+            if (selectedMenu == TaskListTileMenu.EDIT) {
+              onEdit();
+            } else {
+              onDelete();
+            }
+
+    },
       ),
     );
   }
