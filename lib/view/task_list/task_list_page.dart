@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/data/task.dart';
 import 'package:todo/util/constants.dart';
@@ -64,19 +65,48 @@ class TaskListPage extends StatelessWidget {
                 final limit = task.limitDateTime;
 
                 return Card(
-                    color: (now.compareTo(limit) > 0)
-                        ? CustomColors.periodOverTaskColor
-                        : CustomColors.taskCardBgColor(context),
-                    child: TaskListTilePart(
-                      task: task,
-                      onFinishChanged: (isFinished) =>
-                          _finishTask(context, isFinished, task),
-                      onDelete: () => _deleteTask(context, task),
-                      onEdit: () => _showTaskDetail(context, task),
-                    ));
+                  color: (now.compareTo(limit) > 0)
+                      ? CustomColors.periodOverTaskColor
+                      : CustomColors.taskCardBgColor(context),
+                  child: (DeviceInfo.isWebOrDesktop)
+                      ? _createTaskListTile(context, task)
+                      : Slidable(
+                          child: _createTaskListTile(context, task),
+                          endActionPane: ActionPane(
+                            motion: ScrollMotion(),
+                            extentRatio: 0.65,
+                            children: [
+                              SlidableAction(
+                                label: StringR.edit,
+                                icon: Icons.edit,
+                                onPressed: (context) => _showTaskDetail(context,task),
+                              ),
+                              SlidableAction(
+                                label: StringR.delete,
+                                icon: Icons.delete,
+                                onPressed: (context) => _deleteTask(context,task),
+                              ),
+                              SlidableAction(
+                                label: StringR.close,
+                                icon: Icons.close,
+                                onPressed: null,
+                              ),
+                            ],
+                          ),
+                        ),
+                );
               }),
         );
       },
+    );
+  }
+
+  Widget _createTaskListTile(BuildContext context, Task task) {
+    return TaskListTilePart(
+      task: task,
+      onFinishChanged: (isFinished) => _finishTask(context, isFinished, task),
+      onDelete: () => _deleteTask(context, task),
+      onEdit: () => _showTaskDetail(context, task),
     );
   }
 
@@ -96,10 +126,10 @@ class TaskListPage extends StatelessWidget {
     viewModel.finishTask(selectedTask, isFinished);
 
     showSnackBar(
-        context: context,
-        contentText: StringR.finishTaskCompleted,
-        isSnackBarActionNeeded: true,
-        onUndone: () => viewModel.undo(),
+      context: context,
+      contentText: StringR.finishTaskCompleted,
+      isSnackBarActionNeeded: true,
+      onUndone: () => viewModel.undo(),
     );
     viewModel.setCurrentTask(null);
   }
@@ -109,10 +139,10 @@ class TaskListPage extends StatelessWidget {
     viewModel.deleteTask(selectedTask);
 
     showSnackBar(
-        context: context,
-        contentText: StringR.deleteTaskCompleted,
-        isSnackBarActionNeeded: true,
-        onUndone: () => viewModel.undo(),
+      context: context,
+      contentText: StringR.deleteTaskCompleted,
+      isSnackBarActionNeeded: true,
+      onUndone: () => viewModel.undo(),
     );
     viewModel.setCurrentTask(null);
   }
