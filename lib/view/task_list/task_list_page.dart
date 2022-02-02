@@ -79,11 +79,13 @@ class TaskListPage extends StatelessWidget {
                               SlidableAction(
                                 label: StringR.edit,
                                 icon: Icons.edit,
+                                backgroundColor: CustomColors.slideActionColorLight(context),
                                 onPressed: (context) => _showTaskDetail(context,task),
                               ),
                               SlidableAction(
                                 label: StringR.delete,
                                 icon: Icons.delete,
+                                backgroundColor: CustomColors.slideActionColorDark(context),
                                 onPressed: (context) => _deleteTask(context,task),
                               ),
                               SlidableAction(
